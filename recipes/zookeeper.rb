@@ -18,4 +18,8 @@
 # limitations under the License.
 #
 
-package "hadoop-zookeeper"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-zookeeper"
+else
+  package "zookeeper"
+end

@@ -21,7 +21,11 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node['hadoop']['version']}-tasktracker"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-#{node['hadoop']['version']}-tasktracker"
+else
+  package "hadoop-0.20-mapreduce-tasktracker"
+end
 
 node['hadoop']['mapred_site']['mapred.local.dir'].split(',').each do |dir|
   directory dir do

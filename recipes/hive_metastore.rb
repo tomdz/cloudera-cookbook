@@ -20,7 +20,11 @@
 
 include_recipe "cloudera::repo"
 
-package "hadoop-hive-metastore"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hive-metastore"
+else
+  package "hive-metastore"
+end
 
 service "hadoop-hive-metastore" do
   action [ :start, :enable ]

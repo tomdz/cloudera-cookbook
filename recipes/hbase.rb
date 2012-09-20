@@ -18,4 +18,8 @@
 # limitations under the License.
 #
 
-package "hadoop-hbase"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hbase"
+else
+  package "hbase"
+end

@@ -20,4 +20,8 @@
 
 include_recipe "cloudera::repo"
 
-package "hadoop-pig"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-pig"
+else
+  package "pig"
+end

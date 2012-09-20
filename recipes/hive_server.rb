@@ -20,7 +20,11 @@
 
 include_recipe "cloudera::repo"
 
-package "hadoop-hive-server"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hive-server"
+else
+  package "hive-server"
+end
 
 hive_env_vars = { :options => node['hive']['hive_env_options'] }
 
@@ -32,7 +36,6 @@ template "/etc/hive/conf/hive-env.sh" do
   action :create
   variables hive_env_vars
 end
-
 
 service "hadoop-hive-server" do
   action [ :start, :enable ]

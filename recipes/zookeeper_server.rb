@@ -18,7 +18,11 @@
 # limitations under the License.
 #
 
-package "hadoop-zookeeper-server"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-zookeeper-server"
+else
+  package "zookeeper-server"
+end
 
 service "hadoop-zookeeper-server" do
   action [ :start, :enable ]

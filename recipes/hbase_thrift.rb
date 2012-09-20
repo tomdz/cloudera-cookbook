@@ -18,7 +18,11 @@
 # limitations under the License.
 #
 
-package "hadoop-hbase-thrift"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hbase-thrift"
+else
+  package "hbase-thrift"
+end
 
 service "hadoop-hbase-thrift" do
   action [ :start, :enable ]

@@ -20,18 +20,23 @@
 
 #This is a very explicit list what needs to be installed on the Hue server
 
-package "hue-filebrowser-#{node['hadoop']['hue_plugin_version']}"
-package "hue-useradmin-#{node['hadoop']['hue_plugin_version']}"
-package "hue-plugins-#{node['hadoop']['hue_plugin_version']}"
-package "hue-help-#{node['hadoop']['hue_plugin_version']}"
-package "hue-jobbrowser-#{node['hadoop']['hue_plugin_version']}"
-package "hue-about-#{node['hadoop']['hue_plugin_version']}"
-package "hue-beeswax-#{node['hadoop']['hue_plugin_version']}"
-package "hue-proxy-#{node['hadoop']['hue_plugin_version']}"
-package "hue-#{node['hadoop']['hue_plugin_version']}"
-package "hue-common-#{node['hadoop']['hue_plugin_version']}"
-package "hue-jobsub-#{node['hadoop']['hue_plugin_version']}"
-package "hue-shell-#{node['hadoop']['hue_plugin_version']}"
+if node['hadoop']['release'][0] == '3'
+  package "hue-filebrowser-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-useradmin-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-plugins-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-help-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-jobbrowser-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-about-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-beeswax-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-proxy-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-common-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-jobsub-#{node['hadoop']['hue_plugin_version']}"
+  package "hue-shell-#{node['hadoop']['hue_plugin_version']}"
+else
+  package "hue"
+  package "hue-useradmin"
+end
 
 hue_server_vars = { :options => node['hue']['hue_server'] }
 

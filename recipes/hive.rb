@@ -21,8 +21,12 @@
 include_recipe "cloudera::repo"
 
 package "mysql-connector-java"
-package "hadoop-hive"
-package "hadoop-#{node['hadoop']['version']}-native"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hive"
+  package "hadoop-#{node['hadoop']['version']}-native"
+else
+  package "hive"
+end
 
 execute "copy_connector" do
   command "cp /usr/share/java/mysql-connector-java.jar /usr/lib/hive/lib/mysql-connector-java.jar"

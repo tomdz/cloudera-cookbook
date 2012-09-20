@@ -18,7 +18,11 @@
 # limitations under the License.
 #
 
-package "hadoop-hbase-regionserver"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hbase-regionserver"
+else
+  package "hbase-regionserver"
+end
 
 service "hadoop-hbase-regionserver" do
   action [ :start, :enable ]

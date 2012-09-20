@@ -21,7 +21,11 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node['hadoop']['version']}-namenode"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-#{node['hadoop']['version']}-namenode"
+else
+  package "hadoop-hdfs-namenode"
+end
 
 node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').each do |dir|
   directory dir do

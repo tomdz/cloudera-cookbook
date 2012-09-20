@@ -18,7 +18,11 @@
 # limitations under the License.
 #
 
-package "hadoop-hbase-master"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-hbase-master"
+else
+  package "hbase-master"
+end
 
 service "hadoop-hbase-master" do
   action [ :start, :enable ]

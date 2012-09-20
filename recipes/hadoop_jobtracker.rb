@@ -21,7 +21,11 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node['hadoop']['version']}-jobtracker"
+if node['hadoop']['release'][0] == '3'
+  package "hadoop-#{node['hadoop']['version']}-jobtracker"
+else
+  package "hadoop-0.20-mapreduce-jobtracker"
+end
 
 service "hadoop-#{node['hadoop']['version']}-jobtracker" do
   action [ :start, :enable ]
