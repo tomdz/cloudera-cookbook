@@ -21,9 +21,9 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node[:hadoop][:version]}-namenode"
+package "hadoop-#{node['hadoop']['version']}-namenode"
 
-node[:hadoop][:hdfs_site]['dfs.name.dir'].split(',').each do |dir|
+node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').each do |dir|
   directory dir do
     mode 0755
     owner "hdfs"

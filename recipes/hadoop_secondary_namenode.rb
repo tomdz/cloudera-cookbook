@@ -20,9 +20,9 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node[:hadoop][:version]}-secondarynamenode"
+package "hadoop-#{node['hadoop']['version']}-secondarynamenode"
 
-node[:hadoop][:hdfs_site]['fs.checkpoint.dir'].split(',').each do |dir|
+node['hadoop']['hdfs_site']['fs.checkpoint.dir'].split(',').each do |dir|
   directory dir do
     mode 0755
     owner "hdfs"
@@ -32,7 +32,7 @@ node[:hadoop][:hdfs_site]['fs.checkpoint.dir'].split(',').each do |dir|
   end
 end
 
-service "hadoop-#{node[:hadoop][:version]}-secondarynamenode" do
+service "hadoop-#{node['hadoop']['version']}-secondarynamenode" do
   action [ :start, :enable ]
 end
 

@@ -22,7 +22,7 @@ include_recipe "cloudera::repo"
 
 package "hadoop-hive-server"
 
-hive_env_vars = { :options => node[:hive][:hive_env_options] }
+hive_env_vars = { :options => node['hive']['hive_env_options'] }
 
 template "/etc/hive/conf/hive-env.sh" do
   source "hive-env.sh.erb"

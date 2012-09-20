@@ -21,8 +21,8 @@
 
 include_recipe "cloudera::repo"
 
-package "hadoop-#{node[:hadoop][:version]}"
-package "hadoop-#{node[:hadoop][:version]}-native"
+package "hadoop-#{node['hadoop']['version']}"
+package "hadoop-#{node['hadoop']['version']}-native"
 package "nscd"
 
 service "nscd" do
@@ -36,10 +36,10 @@ template "/etc/profile.d/cloudera-hadoop-java.sh" do
   owner "root"
   group "root"
   action :create
-  variables :java_home => node[:java][:java_home]
+  variables :java_home => node['java']['java_home']
 end
 
-chef_conf_dir = "/etc/hadoop-#{node[:hadoop][:version]}/#{node[:hadoop][:conf_dir]}"
+chef_conf_dir = "/etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']}"
 
 directory chef_conf_dir do
   mode 0755
@@ -56,9 +56,9 @@ end
 #  raise
 #end
 
-core_site_vars = { :options => node[:hadoop][:core_site] }
+core_site_vars = { :options => node['hadoop']['core_site'] }
 
-#core_site_vars[:options]['fs.default.name'] = "hdfs://#{namenode[:ipaddress]}:#{node[:hadoop][:namenode_port]}"
+#core_site_vars[:options]['fs.default.name'] = "hdfs://#{namenode[:ipaddress]}:#{node['hadoop'][:namenode_port]}"
 
 template "#{chef_conf_dir}/core-site.xml" do
   source "generic-site.xml.erb"
@@ -71,8 +71,8 @@ end
 
 #secondary_namenode = search(:node, "chef_environment:#{node.chef_environment} and recipes:cloudera\\:\\:hadoop_secondary_namenode_server").first
 
-hdfs_site_vars = { :options => node[:hadoop][:hdfs_site] }
-#hdfs_site_vars[:options]['fs.default.name'] = "hdfs://#{namenode[:ipaddress]}:#{node[:hadoop][:namenode_port]}"
+hdfs_site_vars = { :options => node['hadoop']['hdfs_site'] }
+#hdfs_site_vars[:options]['fs.default.name'] = "hdfs://#{namenode[:ipaddress]}:#{node['hadoop'][:namenode_port]}"
 # TODO dfs.secondary.http.address should have port made into an attribute - maybe
 #hdfs_site_vars[:options]['dfs.secondary.http.address'] = "#{secondary_namenode[:ipaddress]}:50090" if secondary_namenode
 
@@ -87,8 +87,8 @@ end
 
 #jobtracker = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_jobtracker").first
 
-mapred_site_vars = { :options => node[:hadoop][:mapred_site] }
-#mapred_site_vars[:options]['mapred.job.tracker'] = "#{jobtracker[:ipaddress]}:#{node[:hadoop][:jobtracker_port]}" if jobtracker
+mapred_site_vars = { :options => node['hadoop']['mapred_site'] }
+#mapred_site_vars[:options]['mapred.job.tracker'] = "#{jobtracker[:ipaddress]}:#{node['hadoop'][:jobtracker_port]}" if jobtracker
 
 template "#{chef_conf_dir}/mapred-site.xml" do
   source "generic-site.xml.erb"
@@ -104,15 +104,15 @@ template "#{chef_conf_dir}/hadoop-env.sh" do
   owner "hdfs"
   group "hdfs"
   action :create
-  variables( :options => node[:hadoop][:hadoop_env] )
+  variables( :options => node['hadoop']['hadoop_env'] )
 end
 
-template node[:hadoop][:mapred_site]['mapred.fairscheduler.allocation.file'] do
+template node['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] do
   mode 0644
   owner "hdfs"
   group "hdfs"
   action :create
-  variables node[:hadoop][:fair_scheduler]
+  variables node['hadoop']['fair_scheduler']
 end
 
 template "#{chef_conf_dir}/log4j.properties" do
@@ -121,7 +121,7 @@ template "#{chef_conf_dir}/log4j.properties" do
   owner "hdfs"
   group "hdfs"
   action :create
-  variables( :properties => node[:hadoop][:log4j] )
+  variables( :properties => node['hadoop']['log4j'] )
 end
 
 template "#{chef_conf_dir}/hadoop-metrics.properties" do
@@ -130,12 +130,12 @@ template "#{chef_conf_dir}/hadoop-metrics.properties" do
   owner "hdfs"
   group "hdfs"
   action :create
-  variables( :properties => node[:hadoop][:hadoop_metrics] )
+  variables( :properties => node['hadoop']['hadoop_metrics'] )
 end
 
 # Create the master and slave files
 namenode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_namenode OR recipes:cloudera\\:\\:hadoop_secondary_namenode")
-masters = namenode_servers.map { |node| node[:ipaddress] }
+masters = namenode_servers.map { |node| node['ipaddress'] }
 
 template "#{chef_conf_dir}/masters" do
   source "master_slave.erb"
@@ -147,7 +147,7 @@ template "#{chef_conf_dir}/masters" do
 end
 
 datanode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_datanode")
-slaves = datanode_servers.map { |node| node[:ipaddress] }
+slaves = datanode_servers.map { |node| node['ipaddress'] }
 
 template "#{chef_conf_dir}/slaves" do
   source "master_slave.erb"
@@ -159,9 +159,9 @@ template "#{chef_conf_dir}/slaves" do
 end
 
 
-if node[:hadoop][:hdfs_site] && node[:hadoop][:hdfs_site]['topology.script.file.name']
-  topology_dir = File.dirname(node[:hadoop][:hdfs_site]['topology.script.file.name'])
-  topology = { :options => node[:hadoop][:topology] }
+if node['hadoop']['hdfs_site']['topology.script.file.name']
+  topology_dir = File.dirname(node['hadoop']['hdfs_site']['topology.script.file.name'])
+  topology = { :options => node['hadoop']['topology'] }
 
   directory topology_dir do
     mode 0755
@@ -171,7 +171,7 @@ if node[:hadoop][:hdfs_site] && node[:hadoop][:hdfs_site]['topology.script.file.
     recursive true
   end
 
-  template node[:hadoop][:hdfs_site]['topology.script.file.name'] do
+  template node['hadoop']['hdfs_site']['topology.script.file.name'] do
     source "topology.rb.erb"
     mode 0755
     owner "hdfs"
@@ -181,7 +181,7 @@ if node[:hadoop][:hdfs_site] && node[:hadoop][:hdfs_site]['topology.script.file.
   end
 end
 
-hadoop_tmp_dir = File.dirname(node[:hadoop][:core_site]['hadoop.tmp.dir'])
+hadoop_tmp_dir = File.dirname(node['hadoop']['core_site']['hadoop.tmp.dir'])
 
 directory hadoop_tmp_dir do
   mode 0777
@@ -192,5 +192,5 @@ directory hadoop_tmp_dir do
 end
 
 execute "update hadoop alternatives" do
-  command "alternatives --install /etc/hadoop-#{node[:hadoop][:version]}/conf hadoop-#{node[:hadoop][:version]}-conf /etc/hadoop-#{node[:hadoop][:version]}/#{node[:hadoop][:conf_dir]} 50"
+  command "alternatives --install /etc/hadoop-#{node['hadoop']['version']}/conf hadoop-#{node['hadoop']['version']}-conf /etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']} 50"
 end

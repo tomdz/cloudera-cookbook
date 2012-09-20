@@ -21,9 +21,9 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node[:hadoop][:version]}-tasktracker"
+package "hadoop-#{node['hadoop']['version']}-tasktracker"
 
-node[:hadoop][:mapred_site]['mapred.local.dir'].split(',').each do |dir|
+node['hadoop']['mapred_site']['mapred.local.dir'].split(',').each do |dir|
   directory dir do
     mode 0755
     owner "mapred"
@@ -32,6 +32,6 @@ node[:hadoop][:mapred_site]['mapred.local.dir'].split(',').each do |dir|
   end
 end
 
-service "hadoop-#{node[:hadoop][:version]}-tasktracker" do
+service "hadoop-#{node['hadoop']['version']}-tasktracker" do
   action [ :start, :enable ]
 end

@@ -21,9 +21,9 @@
 
 include_recipe "cloudera"
 
-package "hadoop-#{node[:hadoop][:version]}-jobtracker"
+package "hadoop-#{node['hadoop']['version']}-jobtracker"
 
-service "hadoop-#{node[:hadoop][:version]}-jobtracker" do
+service "hadoop-#{node['hadoop']['version']}-jobtracker" do
   action [ :start, :enable ]
 end
 
