@@ -28,7 +28,7 @@ when "debian", "ubuntu"
   os_dist = node['lsb']['id'].downcase
   os_version = node['lsb']['codename']
   os_arch = node['kernel']['machine']
-  os_arch = 'amd64' if arch == 'x86_64'
+  os_arch = 'amd64' if os_arch == 'x86_64'
 
   case node[:hadoop][:release][0]
   when '3'
