@@ -159,7 +159,7 @@ template "#{chef_conf_dir}/slaves" do
 end
 
 
-if node[:hadoop][:hdfs_site]['topology.script.file.name']
+if node[:hadoop][:hdfs_site] && node[:hadoop][:hdfs_site]['topology.script.file.name']
   topology_dir = File.dirname(node[:hadoop][:hdfs_site]['topology.script.file.name'])
   topology = { :options => node[:hadoop][:topology] }
 
