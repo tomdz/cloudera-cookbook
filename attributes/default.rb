@@ -36,9 +36,9 @@ default['hadoop']['yum_repo_key_url'] = nil
 
 default['hadoop']['core_site']['hadoop.tmp.dir'] = "/tmp/hadoop-hdfs"
 
-default['hadoop']['hdfs_site']['dfs.name.dir'] = lambda { node['hadoop']['core_site']['hadoop.tmp.dir'] + "/dfs/name" }
+default['hadoop']['hdfs_site']['dfs.name.dir'] = "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/dfs/name"
 
-default['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] = lambda { "/etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']}/fair-scheduler.xml" }
+default['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] = "/etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']}/fair-scheduler.xml"
 
 default['hadoop']['log4j']['hadoop.root.logger']                                                 = 'INFO,console'
 default['hadoop']['log4j']['hadoop.security.logger']                                             = 'INFO,console'
