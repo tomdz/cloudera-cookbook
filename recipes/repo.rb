@@ -28,6 +28,9 @@ when "debian", "ubuntu"
   os_version = node['lsb']['codename']
   os_arch = node['kernel']['machine']
   os_arch = 'amd64' if os_arch == 'x86_64'
+  apt_repo_uri = nil
+  apt_dist = nil
+  apt_key = nil
 
   if cdh_version[0] == '3'
     # deb http://archive.cloudera.com/debian <RELEASE>-cdh3 contrib
