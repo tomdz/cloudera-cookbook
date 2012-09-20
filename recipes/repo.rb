@@ -48,4 +48,12 @@ when "debian", "ubuntu"
     key apt_key
     deb_src true
   end
+
+  # we're forcing apt-get update manually for now, due to http://tickets.opscode.com/browse/COOK-1385
+  execute "apt-get update" do
+    user    "root"
+    group   "root"
+    command "apt-get update"
+    ignore_failure true
+  end
 end
