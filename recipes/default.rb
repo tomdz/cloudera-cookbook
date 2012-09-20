@@ -21,7 +21,6 @@
 
 include_recipe "cloudera::repo"
 
-
 package "hadoop-#{node[:hadoop][:version]}"
 package "hadoop-#{node[:hadoop][:version]}-native"
 package "nscd"
@@ -30,8 +29,17 @@ service "nscd" do
   action [ :start, :enable ]
 end
 
-chef_conf_dir = "/etc/hadoop-#{node[:hadoop][:version]}/#{node[:hadoop][:conf_dir]}"
+# need to set JAVA_HOME for hadoop
+template "/etc/profile.d/cloudera-hadoop-java.sh" do
+  source "profile-java.sh.erb"
+  mode 0755
+  owner "root"
+  group "root"
+  action :create
+  variables :java_home => node[:java][:java_home]
+end
 
+chef_conf_dir = "/etc/hadoop-#{node[:hadoop][:version]}/#{node[:hadoop][:conf_dir]}"
 
 directory chef_conf_dir do
   mode 0755
@@ -90,7 +98,6 @@ template "#{chef_conf_dir}/mapred-site.xml" do
   action :create
   variables mapred_site_vars
 end
-
 
 template "#{chef_conf_dir}/hadoop-env.sh" do
   mode 0755
