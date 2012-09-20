@@ -28,9 +28,6 @@ when "debian", "ubuntu"
   os_version = node['lsb']['codename']
   os_arch = node['kernel']['machine']
   os_arch = 'amd64' if os_arch == 'x86_64'
-  apt_repo_uri = nil
-  apt_dist = nil
-  apt_key = nil
 
   if cdh_version[0] == '3'
     # deb http://archive.cloudera.com/debian <RELEASE>-cdh3 contrib
@@ -39,7 +36,7 @@ when "debian", "ubuntu"
     apt_key = "http://archive.cloudera.com/debian/archive.key"
   else
     # deb http://archive.cloudera.com/cdh4/<OS-release-arch> <RELEASE>-cdh4 contrib
-    apt_repo_uri "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
+    apt_repo_uri ="http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
     apt_dist = "#{os_version}-cdh#{cdh_version}"
     apt_key = "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh/archive.key"
   end
