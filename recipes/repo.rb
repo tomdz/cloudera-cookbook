@@ -43,7 +43,7 @@ when "debian", "ubuntu"
   Chef::Log.info "Adding apt repository #{apt_repo_uri} #{apt_dist} contrib"
   apt_repository "cloudera-cdh#{cdh_version}" do
     uri apt_repo_uri
-    distribution dist
+    distribution apt_dist
     components [ "contrib" ]
     key apt_key
   end
