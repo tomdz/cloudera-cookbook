@@ -17,6 +17,7 @@ when "redhat", "centos", "scientific", "fedora"
     end
   end
 
+  Chef::Log.info "Adding yum repository #{yum_repo_url}"
   yum_repository "cloudera-cdh#{node['hadoop']['release']}" do
     name "cloudera-cdh3"
     description "Cloudera's Hadoop"
@@ -30,22 +31,22 @@ when "debian", "ubuntu"
   os_arch = node['kernel']['machine']
   os_arch = 'amd64' if os_arch == 'x86_64'
 
-  case node['hadoop']['release'][0]
-  when '3'
+  if cdh_version[0] == '3'
     # deb http://archive.cloudera.com/debian <RELEASE>-cdh3 contrib
-    apt_repository "cloudera-cdh#{cdh_version}" do
-      uri "http://archive.cloudera.com/debian"
-      distribution "#{os_version}-cdh#{cdh_version}"
-      components [ "contrib" ]
-      key "http://archive.cloudera.com/debian/archive.key"
-    end
-  when '4'
+    apt_repo_uri = "http://archive.cloudera.com/debian"
+    apt_dist = "#{os_version}-cdh#{cdh_version}"
+    apt_key = "http://archive.cloudera.com/debian/archive.key"
+  else
     # deb http://archive.cloudera.com/cdh4/<OS-release-arch> <RELEASE>-cdh4 contrib
-    apt_repository "cloudera-cdh#{cdh_version}" do
-      uri "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
-      distribution "#{os_version}-cdh#{cdh_version}"
-      components [ "contrib" ]
-      key "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh/archive.key"
-    end
+    apt_repo_uri "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
+    apt_dist = "#{os_version}-cdh#{cdh_version}"
+    apt_key = "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh/archive.key"
+  end
+  Chef::Log.info "Adding apt repository #{apt_repo_uri} #{apt_dist} contrib"
+  apt_repository "cloudera-cdh#{cdh_version}" do
+    uri apt_repo_uri
+    distribution dist
+    components [ "contrib" ]
+    key apt_key
   end
 end
