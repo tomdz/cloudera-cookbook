@@ -36,6 +36,7 @@ default[:hadoop][:rackaware][:rack]       = "rack0"
 default[:hadoop][:yum_repo_url]           = nil
 default[:hadoop][:yum_repo_key_url]       = nil
 
+default[:hadoop][:core_site]['hadoop.tmp.dir'] = "/tmp/hadoop-hdfs"
 default[:hadoop][:mapred_site]['mapred.fairscheduler.allocation.file'] = "/etc/hadoop-#{node[:hadoop][:version]}/#{node[:hadoop][:conf_dir]}/fair-scheduler.xml"
 
 default[:hadoop][:log4j]['hadoop.root.logger']                                                 = 'INFO,console'
