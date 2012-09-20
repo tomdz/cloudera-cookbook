@@ -35,8 +35,8 @@ when "debian", "ubuntu"
     apt_dist = "#{os_version}-cdh#{cdh_version}"
     apt_key = "http://archive.cloudera.com/debian/archive.key"
   else
-    # deb http://archive.cloudera.com/cdh4/<OS-release-arch> <RELEASE>-cdh4 contrib
-    apt_repo_uri ="http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
+    # deb [arch=amd64] http://archive.cloudera.com/cdh4/<OS-release-arch> <RELEASE>-cdh4 contrib
+    apt_repo_uri ="[arch=amd64] http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
     apt_dist = "#{os_version}-cdh#{cdh_version}"
     apt_key = "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh/archive.key"
   end
