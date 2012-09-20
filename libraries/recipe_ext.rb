@@ -4,7 +4,7 @@ class Chef
       def find_cloudera_namenode(environment = nil)
         if node.run_list.include?("recipes[cloudera::hadoop_namenode")
           node
-        else
+        elsif !Chef::Config[:solo]
           search_string = "recipes:cloudera\:\:hadoop_namenode"
           search_string << " AND chef_environment:#{environment}" if environment
           search(:node, search_string).first

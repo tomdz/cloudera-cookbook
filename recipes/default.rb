@@ -138,30 +138,31 @@ template "#{chef_conf_dir}/hadoop-metrics.properties" do
 end
 
 # Create the master and slave files
-namenode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_namenode OR recipes:cloudera\\:\\:hadoop_secondary_namenode")
-masters = namenode_servers.map { |node| node['ipaddress'] }
+unless Chef::Config[:solo]
+  namenode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_namenode OR recipes:cloudera\\:\\:hadoop_secondary_namenode")
+  masters = namenode_servers.map { |node| node['ipaddress'] }
 
-template "#{chef_conf_dir}/masters" do
-  source "master_slave.erb"
-  mode 0644
-  owner "hdfs"
-  group "hdfs"
-  action :create
-  variables( :nodes => masters )
+  template "#{chef_conf_dir}/masters" do
+    source "master_slave.erb"
+    mode 0644
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    variables( :nodes => masters )
+  end
+
+  datanode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_datanode")
+  slaves = datanode_servers.map { |node| node['ipaddress'] }
+
+  template "#{chef_conf_dir}/slaves" do
+    source "master_slave.erb"
+    mode 0644
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    variables( :nodes => slaves )
+  end
 end
-
-datanode_servers = search(:node, "chef_environment:#{node.chef_environment} AND recipes:cloudera\\:\\:hadoop_datanode")
-slaves = datanode_servers.map { |node| node['ipaddress'] }
-
-template "#{chef_conf_dir}/slaves" do
-  source "master_slave.erb"
-  mode 0644
-  owner "hdfs"
-  group "hdfs"
-  action :create
-  variables( :nodes => slaves )
-end
-
 
 if node['hadoop']['hdfs_site']['topology.script.file.name']
   topology_dir = File.dirname(node['hadoop']['hdfs_site']['topology.script.file.name'])
