@@ -10,7 +10,7 @@ The cookbook is on a fairly good shape now, it was used to stand up a production
 # Requirements
 
 * Chef 10
-* Redhat, CentOS
+* Redhat, CentOS, Debian, Ubuntu
 
 # Attributes
 
@@ -32,7 +32,7 @@ The cookbook is on a fairly good shape now, it was used to stand up a production
 
 ## Alternate install location attributes
 * `node[:hadoop][:yum_repo_url]` - Provide an alternate yum install localtion. If you change this attribute `node[:hadoop][:release]` will not be used to derive the yum_repo_url and you are expected to provide a path to a working repo for the `node[:hadoop][:version]` used. Default `nil`
-* ~~`node[:hadoop][:yum_repo_key_url]` - Provide an alternate yum repo key location. Default `nil`~~ Currently not implamented!
+* ~~`node[:hadoop][:yum_repo_key_url]` - Provide an alternate yum repo key location. Default `nil`~~ Currently not implemented!
 
 # License and Author
 

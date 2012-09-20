@@ -22,16 +22,6 @@ include_recipe "cloudera::repo"
 
 package "hadoop-hive-metastore"
 
-template "/etc/init.d/hadoop-hive-metastore" do
-  source "hadoop_hive_metastore.erb"
-  mode 0755
-  owner "root"
-  group "root"
-  variables(
-    :java_home => node[:java][:java_home]
-  )
-end
-
 service "hadoop-hive-metastore" do
   action [ :start, :enable ]
 end

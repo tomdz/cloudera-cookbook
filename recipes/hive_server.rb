@@ -22,16 +22,6 @@ include_recipe "cloudera::repo"
 
 package "hadoop-hive-server"
 
-template "/etc/init.d/hadoop-hive-server" do
-  source "hadoop_hive_server.erb"
-	mode 0755
-  owner "root"
-  group "root"
-  variables(
-    :java_home => node[:java][:java_home]
-  )
-end
-
 hive_env_vars = { :options => node[:hive][:hive_env_options] }
 
 template "/etc/hive/conf/hive-env.sh" do

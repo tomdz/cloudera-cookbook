@@ -32,15 +32,6 @@ node[:hadoop][:mapred_site]['mapred.local.dir'].split(',').each do |dir|
   end
 end
 
-template "/etc/init.d/hadoop-#{node[:hadoop][:version]}-tasktracker" do
-  mode 0755
-  owner "root"
-  group "root"
-  variables(
-    :java_home => node[:java][:java_home]
-  )
-end
-
 service "hadoop-#{node[:hadoop][:version]}-tasktracker" do
   action [ :start, :enable ]
 end

@@ -23,15 +23,6 @@ include_recipe "cloudera"
 
 package "hadoop-#{node[:hadoop][:version]}-namenode"
 
-template "/etc/init.d/hadoop-#{node[:hadoop][:version]}-namenode" do
-  mode 0755
-  owner "root"
-  group "root"
-  variables(
-    :java_home => node[:java][:java_home]
-  )
-end
-
 node[:hadoop][:hdfs_site]['dfs.name.dir'].split(',').each do |dir|
   directory dir do
     mode 0755
