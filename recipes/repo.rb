@@ -37,7 +37,7 @@ when "debian", "ubuntu"
   else
     # deb [arch=amd64] http://archive.cloudera.com/cdh4/<OS-release-arch> <RELEASE>-cdh4 contrib
     apt_repo_uri ="[arch=amd64] http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh"
-    apt_dist = "#{os_version}-cdh#{cdh_version}"
+    apt_dist = "#{os_version}-cdh4"
     apt_key = "http://archive.cloudera.com/cdh4/#{os_dist}/#{os_version}/#{os_arch}/cdh/archive.key"
   end
   Chef::Log.info "Adding apt repository #{apt_repo_uri} #{apt_dist} contrib"
@@ -46,5 +46,6 @@ when "debian", "ubuntu"
     distribution apt_dist
     components [ "contrib" ]
     key apt_key
+    deb_src true
   end
 end
