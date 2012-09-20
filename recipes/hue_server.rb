@@ -19,6 +19,7 @@
 #
 
 #This is a very explicit list what needs to be installed on the Hue server
+include_recipe "cloudera"
 
 if node['hadoop']['release'][0] == '3'
   package "hue-filebrowser-#{node['hadoop']['hue_plugin_version']}"

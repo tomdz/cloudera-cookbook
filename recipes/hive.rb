@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-include_recipe "cloudera::repo"
+include_recipe "cloudera"
 
 package "mysql-connector-java"
 if node['hadoop']['release'][0] == '3'
