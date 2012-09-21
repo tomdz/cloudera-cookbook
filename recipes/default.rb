@@ -44,7 +44,7 @@ template "/etc/profile.d/cloudera-hadoop-java.sh" do
   variables :java_home => node['java']['java_home']
 end
 
-chef_conf_dir = "/etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']}"
+chef_conf_dir = node['hadoop']['conf_dir']
 
 directory chef_conf_dir do
   mode 0755
