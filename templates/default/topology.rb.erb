@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby
 
 rack_map = { 
-<% counter = @options.size %>
-<% @options.each do |key, value| %>
-  <% counter -= 1 %>
-    '<%= key %>' => '<%= value %>'<%= ',' unless counter == 0 %>
-  <% end %>
+<% @options.each_with_index do |(key, value), counter| %>
+  '<%= key %>' => '<%= value %>'<%= ',' if counter < @options.size - 1 %>
+<% end %>
 }
-
 
 if rack_map.has_key?(ARGV[0])
   puts rack_map[ARGV[0]]

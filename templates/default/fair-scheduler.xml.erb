@@ -5,7 +5,7 @@
 
 <allocations>
 
-  <% @pools.each do |pool, pool_value| %>
+  <% (@pools || {}).each do |pool, pool_value| %>
     <pool name="<%= pool %>">
     <% pool_value.each do |k, v| %>
       <%= "<#{k}>#{v}</#{k}>" %>
@@ -13,17 +13,15 @@
     </pool>
   <% end %>
 
-  <% if @users %>
-    <% @users.each do |user, user_value| %>
-      <user name="<%= user %>">
-        <% user_value.each do |k, v| %>
-        <%= "<#{k}>#{v}</#{k}>" %>
-        <% end %>
-      </user>
-    <% end %>
+  <% (@users || {}).each do |user, user_value| %>
+    <user name="<%= user %>">
+      <% user_value.each do |k, v| %>
+      <%= "<#{k}>#{v}</#{k}>" %>
+      <% end %>
+    </user>
   <% end %>
 
-  <% @defaults.each do |k, v| %>
+  <% (@defaults || {}).each do |k, v| %>
     <%= "<#{k}>#{v}</#{k}>" %>
   <% end %>
 
