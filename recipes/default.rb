@@ -120,6 +120,26 @@ template node['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] d
   variables node['hadoop']['fair_scheduler']
 end
 
+default_prop_file = File.join(File.expand_path("..", __FILE__), "..", "attributes", "log4j-cdh#{node['hadoop']['release'][0]}.properties")
+log4j_prop_keys = []
+log4j_props = {}
+File.new(default_prop_file).lines.each do |line|
+  key, value = line.strip!.split('=', 2)
+  key.strip!
+  if key.size > 0 && key[0] != '#'
+    log4j_prop_keys << key
+    log4j_props[key] = value
+  end
+end
+(node['hadoop']['log4j'] || {}).each do |key, value|
+  key.strip!
+  unless log4j_props.contains?(key)
+    log4j_prop_keys << key
+  end
+  log4j_props[key] = value
+end
+Chef::Log.debug log4j_props.to_yaml
+
 template "#{chef_conf_dir}/log4j.properties" do
   source "generic.properties.erb"
   mode 0644
