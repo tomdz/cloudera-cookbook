@@ -21,7 +21,7 @@
 default['hadoop']['version'] = "0.20"
 default['hadoop']['release'] = "3u3"
 
-default['hadoop']['conf_dir'] = "/etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']}"
+default['hadoop']['conf_dir'] = "/etc/hadoop-#{node['hadoop']['version']}/conf.chef"
 
 default['hadoop']['namenode_port']   = "54310"
 default['hadoop']['jobtracker_port'] = "54311"

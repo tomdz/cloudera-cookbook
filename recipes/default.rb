@@ -198,5 +198,18 @@ directory hadoop_tmp_dir do
 end
 
 execute "update hadoop alternatives" do
-  command "alternatives --install /etc/hadoop-#{node['hadoop']['version']}/conf hadoop-#{node['hadoop']['version']}-conf /etc/hadoop-#{node['hadoop']['version']}/#{node['hadoop']['conf_dir']} 50"
+  if node['hadoop']['release'][0] == '3'
+    alternative_link = "/etc/hadoop-#{node['hadoop']['version']}/conf"
+    alternative_name = "hadoop-#{node['hadoop']['version']}-conf"
+  else
+    alternative_link = "/etc/hadoop/conf"
+    alternative_name = "hadoop-conf"
+  end
+
+  case node['platform']
+  when "redhat", "centos", "scientific", "fedora"
+    command "alternatives --install #{alternative_link} #{alternative_name} #{chef_conf_dir} 50"
+  when "debian", "ubuntu"
+    command "update-alternatives --install #{alternative_link} #{alternative_name} #{chef_conf_dir} 50"
+  end
 end
