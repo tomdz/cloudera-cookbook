@@ -127,8 +127,8 @@ log4j_prop_keys = []
 log4j_props = {}
 File.new(default_prop_file).lines.each do |line|
   key, value = line.strip!.split('=', 2)
-  key.strip!
-  if key.size > 0 && key[0..0] != '#'
+  key.strip! if key
+  if key && key.size > 0 && key[0..0] != '#'
     log4j_prop_keys << key
     log4j_props[key] = value
   end
