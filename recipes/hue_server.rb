@@ -21,7 +21,7 @@
 #This is a very explicit list what needs to be installed on the Hue server
 include_recipe "cloudera"
 
-if node['hadoop']['release'][0] == '3'
+if node['hadoop']['cdh_major_version'] == '3'
   package "hue-filebrowser-#{node['hadoop']['hue_plugin_version']}"
   package "hue-useradmin-#{node['hadoop']['hue_plugin_version']}"
   package "hue-plugins-#{node['hadoop']['hue_plugin_version']}"

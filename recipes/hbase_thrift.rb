@@ -19,7 +19,7 @@
 #
 include_recipe "cloudera"
 
-if node['hadoop']['release'][0] == '3'
+if node['hadoop']['cdh_major_version'] == '3'
   package "hadoop-hbase-thrift"
 else
   package "hbase-thrift"

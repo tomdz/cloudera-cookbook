@@ -21,7 +21,9 @@
 
 include_recipe "cloudera::repo"
 
-if node['hadoop']['release'][0] == '3'
+node['hadoop']['cdh_major_version'] = node['hadoop']['release'][0..0]
+
+if node['hadoop']['cdh_major_version'] == '3'
   package "hadoop-#{node['hadoop']['version']}"
   package "hadoop-#{node['hadoop']['version']}-native"
 else
@@ -120,13 +122,13 @@ template node['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] d
   variables node['hadoop']['fair_scheduler']
 end
 
-default_prop_file = File.join(File.expand_path("..", __FILE__), "..", "attributes", "log4j-cdh#{node['hadoop']['release'][0]}.properties")
+default_prop_file = File.join(File.expand_path("..", __FILE__), "..", "attributes", "log4j-cdh#{node['hadoop']['cdh_major_version']}.properties")
 log4j_prop_keys = []
 log4j_props = {}
 File.new(default_prop_file).lines.each do |line|
   key, value = line.strip!.split('=', 2)
   key.strip!
-  if key.size > 0 && key[0] != '#'
+  if key.size > 0 && key[0..0] != '#'
     log4j_prop_keys << key
     log4j_props[key] = value
   end
@@ -138,7 +140,6 @@ end
   end
   log4j_props[key] = value
 end
-Chef::Log.debug log4j_props.to_yaml
 
 template "#{chef_conf_dir}/log4j.properties" do
   source "generic.properties.erb"
@@ -218,7 +219,7 @@ directory hadoop_tmp_dir do
 end
 
 execute "update hadoop alternatives" do
-  if node['hadoop']['release'][0] == '3'
+  if node['hadoop']['cdh_major_version'] == '3'
     alternative_link = "/etc/hadoop-#{node['hadoop']['version']}/conf"
     alternative_name = "hadoop-#{node['hadoop']['version']}-conf"
   else

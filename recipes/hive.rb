@@ -21,7 +21,7 @@
 include_recipe "cloudera"
 
 package "mysql-connector-java"
-if node['hadoop']['release'][0] == '3'
+if node['hadoop']['cdh_major_version'] == '3'
   package "hadoop-hive"
   package "hadoop-#{node['hadoop']['version']}-native"
 else

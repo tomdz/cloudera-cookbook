@@ -29,7 +29,7 @@ when "debian", "ubuntu"
   os_arch = node['kernel']['machine']
   os_arch = 'amd64' if os_arch == 'x86_64'
 
-  if cdh_version[0] == '3'
+  if cdh_version[0..0] == '3'
     # deb http://archive.cloudera.com/debian <RELEASE>-cdh3 contrib
     apt_repo_uri = "http://archive.cloudera.com/debian"
     apt_dist = "#{os_version}-cdh#{cdh_version}"
