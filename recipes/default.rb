@@ -147,7 +147,7 @@ template "#{chef_conf_dir}/log4j.properties" do
   owner "hdfs"
   group "hdfs"
   action :create
-  variables( :properties => node['hadoop']['log4j'] )
+  variables( :properties => log4j_props )
 end
 
 template "#{chef_conf_dir}/hadoop-metrics.properties" do
