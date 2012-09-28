@@ -27,9 +27,11 @@ else
   package "hadoop-hdfs-datanode"
 end
 
-#Example hue-plugins-1.2.0.0+114.20-1.noarch 
+#Example hue-plugins-1.2.0.0+114.20-1.noarch
 package "hue-plugins" do
-  version "#{node['hadoop']['hue_plugin_version']}-#{node['hadoop']['hue_plugin_release']}"
+  if node['hadoop']['cdh_major_version'] == '3'
+    version "#{node['hadoop']['hue_plugin_version']}-#{node['hadoop']['hue_plugin_release']}"
+  end
   action :install
 end
 
@@ -49,6 +51,12 @@ node['hadoop']['hdfs_site']['dfs.data.dir'].split(',').each do |dir|
 
 end
 
-service "hadoop-#{node['hadoop']['version']}-datanode" do
+if node['hadoop']['cdh_major_version'] == '3'
+  service_name = "hadoop-#{node['hadoop']['version']}-datanode"
+else
+  service_name = "hadoop-hdfs-datanode"
+end
+
+service service_name do
   action [ :start, :enable ]
 end

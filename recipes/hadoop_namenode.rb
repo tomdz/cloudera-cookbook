@@ -27,7 +27,10 @@ else
   package "hadoop-hdfs-namenode"
 end
 
+is_formatted = false
+
 node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').each do |dir|
+  is_formatted = true if File.exists?(File.join(dir, 'current', 'VERSION'))
   directory dir do
     mode 0755
     owner "hdfs"
@@ -37,3 +40,22 @@ node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').each do |dir|
   end
 end
 
+unless is_formatted
+  Chef::Log.info "Formating the namenode"
+
+  execute "hadoop namenode -format" do
+    user    "hdfs"
+    group   "hdfs"
+    command "hadoop namenode -format"
+  end
+end
+
+if node['hadoop']['cdh_major_version'] == '3'
+  service_name = "hadoop-#{node['hadoop']['version']}-namenode"
+else
+  service_name = "hadoop-hdfs-namenode"
+end
+
+service service_name do
+  action [ :start, :enable ]
+end

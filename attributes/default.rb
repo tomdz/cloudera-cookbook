@@ -37,6 +37,7 @@ default['hadoop']['yum_repo_key_url'] = nil
 default['hadoop']['core_site']['hadoop.tmp.dir'] = "/tmp/hadoop-hdfs"
 
 default['hadoop']['hdfs_site']['dfs.name.dir'] = "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/dfs/name"
+default['hadoop']['hdfs_site']['dfs.data.dir'] = "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/dfs/data"
 
 default['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] = "#{node['hadoop']['conf_dir']}/fair-scheduler.xml"
 
