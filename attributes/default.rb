@@ -41,4 +41,8 @@ default['hadoop']['hdfs_site']['dfs.data.dir'] = "#{node['hadoop']['core_site'][
 
 default['hadoop']['mapred_site']['mapred.fairscheduler.allocation.file'] = "#{node['hadoop']['conf_dir']}/fair-scheduler.xml"
 
+default['zookeeper']['dataDir'] = "/var/zookeeper"
+default['zookeeper']['dataLogDir'] = "#{node['zookeeper']['dataDir']}"
+default['zookeeper']['clientPort'] = "2181"
+
 # log4j default values are defined in the log4j properties files

@@ -25,6 +25,55 @@ else
   package "zookeeper-server"
 end
 
-service "hadoop-zookeeper-server" do
+if Chef::Config[:solo]
+  my_id = node['zookeeper']['myid']
+else
+  # TODO: use search to find other zookeeper servers and choose myid accordingly
+end
+
+template "/etc/zookeeper/conf/zoo.cfg" do
+  source "zoo.cfg.erb"
+  mode 0755
+  owner "zookeeper"
+  group "zookeeper"
+  action :create
+  variables :options => node['zookeeper']
+end
+
+if node['hadoop']['cdh_major_version'] == '3'
+  service_name = "hadoop-zookeeper-server"
+else
+  service_name = "zookeeper-server"
+end
+
+data_dir = node['zookeeper']['dataDir']
+
+directory "/var/log/zookeeper" do
+  mode 0755
+  owner "zookeeper"
+  group "zookeeper"
+  action :create
+  recursive true
+end
+
+unless File.exists?(data_dir)
+  Chef::Log.info "Initializing zookeeper"
+
+  directory data_dir do
+    mode 0755
+    owner "zookeeper"
+    group "zookeeper"
+    action :create
+    recursive true
+  end
+
+  execute "#{service_name}-initialize" do
+    user    "zookeeper"
+    group   "zookeeper"
+    command "#{service_name}-initialize --configfile=/etc/zookeeper/conf/zoo.cfg --myid=#{my_id}"
+  end
+end
+
+service service_name do
   action [ :start, :enable ]
 end
